@@ -15,11 +15,10 @@ class ProjectAdmin(admin.ModelAdmin):
 
     def get_url(self, obj):
         text = '-'
-        url = reverse('projects-panoramas', args=[obj.code])
-        text = format_html('<a href="{url}" target="_blank">{text}</a>', url=url, text=_('View'))
         try:
-            url = reverse('projects-panoramas', args=[obj.code])
-            text = format_html('<a href="{url}" target="_blank">{text}</a>', url=url, text=_('View'))
+            if obj:
+                url = reverse('projects-panoramas', args=[obj.code])
+                text = format_html('<a href="{url}" target="_blank">{text}</a>', url=url, text=_('View'))
         except Exception:
             pass
         return text
