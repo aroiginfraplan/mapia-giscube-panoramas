@@ -53,14 +53,18 @@ class ProjectViewSet(ReadOnlyModelViewSet):
         if not radius:
             return Response(data=msg, status=status.HTTP_400_BAD_REQUEST)
 
-        qs = Panorama.objects.filter(project_id=code)
+        filter = {'project_id': code}
+        c = request.GET.get('c')
+        if c:
+            filter['category'] = c
+
+        qs = Panorama.objects.filter(**filter)
         geom = Point(latlon[1], latlon[0])
         qs = qs.filter(
             geom__distance_lte=(geom, D(m=radius))
         ).annotate(
             distance=Distance(geom, 'geom')
         ).order_by('distance')
-
         serializer = PanoramaSerializer(qs, many=True)
 
         return Response(serializer.data)

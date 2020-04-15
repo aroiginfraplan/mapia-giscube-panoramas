@@ -16,6 +16,7 @@ class Project(models.Model):
 
 class Panorama(models.Model):
     project = models.ForeignKey(Project, to_field='code', on_delete=models.CASCADE, related_name='panoramas')
+    category = models.CharField(max_length=255, null=True, blank=True)
     filename = models.CharField(max_length=100)
     filetype = models.CharField(max_length=20)
     sourceid = models.IntegerField(null=True)
