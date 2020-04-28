@@ -6,8 +6,8 @@ from .models import Panorama, Project
 class PanoramaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Panorama
-        fields = ('id', 'projecte', 'filename', 'filetype', 'sourceid',
-                  'timestamp', 'geom', 'altitude', 'roll', 'pitch', 'pan')
+        fields = ('id', 'project', 'category', 'filename', 'filetype', 'sourceid', 'capture', 'altitude', 'roll',
+                  'pitch', 'pan', 'geom')
 
 
 class ProjectSerializer(serializers.ModelSerializer):
