@@ -10,14 +10,18 @@ from django.utils.http import http_date
 from django.views.decorators.clickjacking import xframe_options_exempt
 from django.views.static import was_modified_since
 
+from oauth2_provider.decorators import protected_resource
+
+
 from .settings import PANORAMAS_ROOT
 
 
 xframe_options_exempt_m = method_decorator(xframe_options_exempt, name='dispatch')
 
 
+@protected_resource()
 @xframe_options_exempt_m
-def serve_panoramas_files(request, code, path):
+def panoramas_files_server(request, code, path):
     if not request.user.is_authenticated:
         raise PermissionDenied
 
