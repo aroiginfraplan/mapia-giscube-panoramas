@@ -58,6 +58,10 @@ class ProjectViewSet(ReadOnlyModelViewSet):
         if c:
             filter['category'] = c
 
+        sourceid = request.GET.get('sourceid')
+        if sourceid is not None:
+            filter['sourceid'] = sourceid
+
         qs = Panorama.objects.filter(**filter)
         geom = Point(latlon[1], latlon[0])
         qs = qs.filter(
