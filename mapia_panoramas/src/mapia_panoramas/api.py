@@ -63,7 +63,7 @@ class ProjectViewSet(ReadOnlyModelViewSet):
             filter['sourceid'] = sourceid
 
         qs = Panorama.objects.filter(**filter)
-        geom = Point(latlon[1], latlon[0])
+        geom = Point(latlon[1], latlon[0], srid=4326)
         qs = qs.filter(
             geom__distance_lte=(geom, D(m=radius))
         ).annotate(

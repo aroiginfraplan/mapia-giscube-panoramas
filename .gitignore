@@ -2,3 +2,9 @@ __pycache__
 *.pyc
 **/no
 pylama.ini
+
+panoramas/
+.env/
+virtualenv.sh
+requirements.txt
+manage.py
