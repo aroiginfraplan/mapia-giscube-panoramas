@@ -3,7 +3,7 @@ from django.urls import reverse
 from django.utils.html import format_html
 from django.utils.translation import gettext as _
 
-from .models import Project
+from .models import Project, PointCloud
 
 
 @admin.register(Project)

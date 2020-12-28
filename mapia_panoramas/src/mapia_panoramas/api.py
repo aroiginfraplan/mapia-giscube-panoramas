@@ -9,8 +9,8 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.viewsets import ReadOnlyModelViewSet
 
-from .models import Panorama, Project
-from .serializers import PanoramaSerializer, ProjectSerializer
+from .models import Panorama, Project, PointCloud
+from .serializers import PanoramaSerializer, ProjectSerializer, PointCloudSerializer
 
 
 class StandardResultsSetPagination(PageNumberPagination):
@@ -70,5 +70,30 @@ class ProjectViewSet(ReadOnlyModelViewSet):
             distance=Distance(geom, 'geom')
         ).order_by('distance')
         serializer = PanoramaSerializer(qs, many=True)
+
+        return Response(serializer.data)
+
+    @action(detail=True, methods=['get'])
+    def point_cloud(self, request, code=None):
+        latlon = None
+        p = request.GET.get('p')
+        if p:
+            try:
+                latlon = p.split(',')
+                latlon = list(map(float, latlon))
+            except Exception:
+                msg = 'ERROR: invalid p parameter'
+        else:
+            msg = 'ERROR: missing p parameter'
+        if not latlon:
+            return Response(data=msg, status=status.HTTP_400_BAD_REQUEST)
+
+        filter = {'project_id': code}
+        qs = PointCloud.objects.filter(**filter)
+        geom = Point(latlon[1], latlon[0], srid=4326)
+        qs = qs.filter(
+            geom__contains=geom
+        )
+        serializer = PointCloudSerializer(qs, many=True)
 
         return Response(serializer.data)

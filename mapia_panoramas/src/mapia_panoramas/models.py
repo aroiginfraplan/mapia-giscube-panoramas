@@ -5,9 +5,14 @@ from django.utils.translation import gettext as _
 class Project(models.Model):
     code = models.CharField(_('code'), max_length=100, blank=False, null=False, unique=True)
     name = models.CharField(_('name'), max_length=100)
+    description = models.TextField(null=True, blank=True)
+    date_start = models.DateField(null=True, blank=True)
+    date_end = models.DateField(null=True, blank=True)
+    zone = models.CharField(max_length=250, null=True, blank=True)
     folder_panorama = models.CharField(max_length=100, null=True, blank=True)
     folder_images = models.CharField(max_length=100, null=True, blank=True)
     folder_point_cloud = models.CharField(max_length=100, null=True, blank=True)
+    layer_panorama = models.CharField(max_length=20, null=True, blank=True, help_text='Giscube_id of related layer')
 
     class Meta:
         verbose_name = _('Campaign')
@@ -54,7 +59,7 @@ class Lateral(models.Model):
         return '%s %s' % (self.file_name, self.panorama)
 
 class PointCloud(models.Model):
-    project = models.ForeignKey(Project, on_delete=models.CASCADE)
+    project = models.ForeignKey(Project, to_field='code', on_delete=models.CASCADE, related_name='pointclouds')
     code = models.CharField(_('code'), max_length=100, blank=False, null=False, unique=True)
     name = models.CharField(_('name'), max_length=100)
     file_folder = models.CharField(max_length=100, null=True, blank=True)
@@ -65,4 +70,4 @@ class PointCloud(models.Model):
         verbose_name_plural = _('Point clouds')
 
     def __str__(self):
-        return '%s %s' % (self.name, self.project)
+        return '%s %s' % (self.project, self.name)
