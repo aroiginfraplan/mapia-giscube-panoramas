@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Lateral, Panorama, Project, PointCloud
+from .models import Lateral, Panorama, Project, PointCloud, LocalPointCloud
 
 class LateralSerializer(serializers.ModelSerializer):
     class Meta:
@@ -18,6 +18,11 @@ class PanoramaSerializer(serializers.ModelSerializer):
 class PointCloudSerializer(serializers.ModelSerializer):
     class Meta:
         model = PointCloud
+        fields = ('id', 'project', 'code', 'name', 'file_folder', 'geom')
+
+class LocalPointCloudSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = LocalPointCloud
         fields = ('id', 'project', 'code', 'name', 'file_folder', 'geom')
 
 class ProjectSerializer(serializers.ModelSerializer):

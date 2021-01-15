@@ -71,3 +71,17 @@ class PointCloud(models.Model):
 
     def __str__(self):
         return '%s %s' % (self.project, self.name)
+
+class LocalPointCloud(models.Model):
+    project = models.ForeignKey(Project, to_field='code', on_delete=models.CASCADE)
+    code = models.CharField(_('code'), max_length=100, blank=False, null=False, unique=True)
+    name = models.CharField(_('name'), max_length=100)
+    file_folder = models.CharField(max_length=100, null=True, blank=True)
+    geom = models.PolygonField(db_index=True)
+
+    class Meta:
+        verbose_name = _('Local point cloud')
+        verbose_name_plural = _('Local point clouds')
+
+    def __str__(self):
+        return '%s %s' % (self.project, self.name)
