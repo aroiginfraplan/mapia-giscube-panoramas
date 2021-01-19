@@ -14,6 +14,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='pointcloud',
             name='project',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='pointclouds', to='mapia_panoramas.Project', to_field='code'),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='mapia_panoramas.Project'),
         ),
     ]

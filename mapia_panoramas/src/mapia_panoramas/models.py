@@ -28,8 +28,8 @@ class Panorama(models.Model):
     file_name = models.CharField(max_length=100, null=True, blank=True)
     file_folder = models.CharField(max_length=100, null=True, blank=True)
     file_type = models.CharField(max_length=20, null=True, blank=True)
-    source_id = models.IntegerField(null=True)
-    date = models.DateTimeField(null=True)
+    source_id = models.IntegerField(null=True, blank=True)
+    date = models.DateTimeField(null=True, blank=True)
     altitude = models.FloatField(null=False, default=0)
     pan = models.FloatField(null=False, default=0)
     pitch = models.FloatField(null=False, default=0)
@@ -59,7 +59,7 @@ class Lateral(models.Model):
         return '%s %s' % (self.file_name, self.panorama)
 
 class PointCloud(models.Model):
-    project = models.ForeignKey(Project, to_field='code', on_delete=models.CASCADE, related_name='pointclouds')
+    project = models.ForeignKey(Project, on_delete=models.CASCADE)
     code = models.CharField(_('code'), max_length=100, blank=False, null=False, unique=True)
     name = models.CharField(_('name'), max_length=100)
     file_folder = models.CharField(max_length=100, null=True, blank=True)
