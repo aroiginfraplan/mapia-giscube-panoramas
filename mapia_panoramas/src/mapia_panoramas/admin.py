@@ -23,11 +23,3 @@ class ProjectAdmin(admin.ModelAdmin):
             pass
         return text
     get_url.short_description = _('URL')
-
-@admin.register(Panorama)
-class PanoramaAdmin(admin.ModelAdmin):
-    pass
-
-@admin.register(PointCloud)
-class PointCloudAdmin(admin.ModelAdmin):
-    pass
