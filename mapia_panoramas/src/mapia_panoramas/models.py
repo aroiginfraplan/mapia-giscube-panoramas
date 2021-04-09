@@ -58,6 +58,7 @@ class Lateral(models.Model):
     def __srt__(self):
         return '%s %s' % (self.file_name, self.panorama)
 
+
 class PointCloud(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     code = models.CharField(_('code'), max_length=100, blank=False, null=False, unique=True)
@@ -71,6 +72,7 @@ class PointCloud(models.Model):
 
     def __str__(self):
         return '%s %s' % (self.project, self.name)
+
 
 class LocalPointCloud(models.Model):
     project = models.ForeignKey(Project, to_field='code', on_delete=models.CASCADE)

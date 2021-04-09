@@ -97,7 +97,7 @@ class ProjectViewSet(ReadOnlyModelViewSet):
         serializer = PointCloudSerializer(qs, many=True)
 
         return Response(serializer.data)
-        
+
     @action(detail=True, methods=['get'])
     def local_point_cloud(self, request, code=None):
         latlon = None
