@@ -6,5 +6,5 @@ pylama.ini
 panoramas/
 .env/
 virtualenv.sh
-requirements.txt
+requirements-devel.txt
 manage.py
