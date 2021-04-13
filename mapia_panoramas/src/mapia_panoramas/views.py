@@ -22,8 +22,10 @@ def panoramas_files_server(request, code, path):
         raise PermissionDenied
 
     path = os.path.join(code, path)
-    fullpath = os.path.join(PANORAMAS_ROOT, path)
-    if not os.path.exists(fullpath) or not os.path.realpath(fullpath).startswith(os.path.join(PANORAMAS_ROOT, code)):
+    fullpath = os.path.realpath(os.path.join(PANORAMAS_ROOT, path))
+    panoramas_full_path = os.path.realpath(os.path.join(PANORAMAS_ROOT, code))
+
+    if not os.path.exists(fullpath) or not fullpath.startswith(panoramas_full_path):
         if AWS_STORAGE_BUCKET_NAME:
             return panoramas_files_s3(request, path)
         else:
