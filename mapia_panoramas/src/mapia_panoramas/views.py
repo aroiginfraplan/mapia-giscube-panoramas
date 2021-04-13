@@ -10,13 +10,11 @@ from django.views.static import was_modified_since
 
 import boto3
 from botocore.client import Config
-from oauth2_provider.decorators import protected_resource
 
 from .settings import (AWS_STORAGE_BUCKET_NAME, AWS_S3_REGION_NAME, AWS_S3_ENDPOINT_URL,
                        AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, PANORAMAS_ROOT)
 
 
-@protected_resource()
 def panoramas_files_server(request, code, path):
     if not request.user.is_authenticated:
         raise PermissionDenied
