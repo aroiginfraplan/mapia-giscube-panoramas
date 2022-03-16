@@ -3,8 +3,7 @@ import os
 import stat
 
 from django.core.exceptions import PermissionDenied
-from django.http import HttpResponse, HttpResponseRedirect
-from django.http import Http404, HttpResponseNotModified
+from django.http import HttpResponse, HttpResponseRedirect, Http404, HttpResponseNotModified
 from django.utils.http import http_date
 from django.views.static import was_modified_since
 
@@ -35,8 +34,15 @@ def panoramas_files_server(request, code, path):
     if not was_modified_since(request.META.get('HTTP_IF_MODIFIED_SINCE'),
                               statobj[stat.ST_MTIME], statobj[stat.ST_SIZE]):
         return HttpResponseNotModified(content_type=content_type)
-    response = HttpResponse(
-        open(fullpath, 'rb').read(), content_type=content_type)
+
+    http_range = request.META.get('HTTP_RANGE')
+    if http_range:
+        response = files_by_range(http_range, fullpath, content_type)
+    else:
+        response = HttpResponse(
+            open(fullpath, 'rb').read(),
+            content_type=content_type
+        )
     response["Last-Modified"] = http_date(statobj[stat.ST_MTIME])
     # filename = os.path.basename(path)
     # response['Content-Disposition'] = smart_str(u'attachment; filename={0}'.format(filename))
@@ -61,3 +67,29 @@ def panoramas_files_s3(request, path):
         },
     )
     return HttpResponseRedirect(url)
+
+
+def files_by_range(http_range, fullpath, content_type):
+    if not (http_range and http_range.startswith('bytes=') and http_range.count('-') == 1):
+        return HttpResponse()
+
+    f = open(fullpath, 'rb')
+    statobj = os.fstat(f.fileno())
+    start, end = http_range.split('=')[1].split('-')
+    if not start:  # requesting the last N bytes
+        start = max(0, statobj.st_size - int(end))
+        end = ''
+    start, end = int(start or 0), int(end or statobj.st_size - 1)
+    assert 0 <= start < statobj.st_size, (start, statobj.st_size)
+    end = min(end, statobj.st_size - 1)
+    f.seek(start)
+    old_read = f.read
+    f.read = lambda n: old_read(min(n, end + 1 - f.tell()))
+    response = HttpResponse(
+        f.read(end),
+        content_type=content_type
+    )
+    response.status_code = 206
+    response['Content-Length'] = end + 1 - start
+    response['Content-Range'] = 'bytes %d-%d/%d' % (start, end, statobj.st_size)
+    return response
