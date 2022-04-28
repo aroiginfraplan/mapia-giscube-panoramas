@@ -60,7 +60,7 @@ class Lateral(models.Model):
 
 
 class PointCloud(models.Model):
-    project = models.ForeignKey(Project, on_delete=models.CASCADE)
+    project = models.ForeignKey(Project, to_field='code', on_delete=models.CASCADE)
     code = models.CharField(_('code'), max_length=100, blank=False, null=False, unique=True)
     name = models.CharField(_('name'), max_length=100)
     file_folder = models.CharField(max_length=100, null=True, blank=True)
