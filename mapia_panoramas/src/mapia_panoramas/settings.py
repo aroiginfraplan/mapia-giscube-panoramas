@@ -3,6 +3,7 @@ from django.conf import settings
 
 PANORAMAS_ROOT = os.environ.get(
     'PANORAMAS_ROOT', os.path.join(settings.MEDIA_ROOT, 'panoramas')).rstrip('/')
+PANORAMAS_PUBLIC = os.getenv('PANORAMAS_PUBLIC', 'False').lower() == 'true'
 
 PANORAMAS_BUCKET_NAME = os.environ.get('PANORAMAS_BUCKET_NAME', '')
 PANORAMAS_BUCKET_REGION = os.environ.get('PANORAMAS_BUCKET_REGION', '')

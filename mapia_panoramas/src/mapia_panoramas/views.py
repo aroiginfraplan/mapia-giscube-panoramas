@@ -11,11 +11,11 @@ import boto3
 from botocore.client import Config
 
 from .settings import (AWS_STORAGE_BUCKET_NAME, AWS_S3_REGION_NAME, AWS_S3_ENDPOINT_URL,
-                       AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, PANORAMAS_ROOT)
+                       AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, PANORAMAS_ROOT, PANORAMAS_PUBLIC)
 
 
 def panoramas_files_server(request, code, path):
-    if not request.user.is_authenticated:
+    if not PANORAMAS_PUBLIC and not request.user.is_authenticated:
         raise PermissionDenied
 
     path = os.path.join(code, path)
